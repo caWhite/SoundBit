@@ -1,0 +1,18 @@
+<html>
+<head>
+</head>
+<body>
+
+	<h1> {{ artist }}</h1>
+	<p> {{bio}} </p>
+	<h2> Simlar Artists </h2>
+	<ul>
+	{% for a in similar %}
+	<li> 
+		<a href="{% url 'artist' a.name %}"> {{a.name}} </a>
+	</li>
+	{% endfor %}
+	</ul>
+	
+</body>
+</html>
