@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<head>
+{% extends 'base.html' %}
 
-</head>
-<body>
+{% block body %}
+	<span>{{error}}</span>
 	<form method='POST' action="{% url 'search' %}">
 	{% csrf_token %}
-		<input type='text' name='search'>
+		<input type='text' name='name'>
 		<input type ='submit' value='search'>
 	</form>
-
-</body>
+{% endblock %}

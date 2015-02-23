@@ -1,18 +1,24 @@
-<html>
-<head>
-</head>
-<body>
+{% extends 'base.html' %}
 
-	<h1> {{ artist }}</h1>
-	<p> {{bio}} </p>
+{% block body %}
+	<h1> {{ artist_name }} </h1>
+	{% for g in artist.genre%}
+		<span> 
+			<a href="{% url 'genre' g %}">{{g}}</a> 
+		</span>
+	{% endfor %}
+	<h2> Bio </h2>
+	<p> 
+		{{bio.text}} 
+		<a href="{{artist.bio.url}}">Read more</a>
+	</p>
 	<h2> Simlar Artists </h2>
 	<ul>
-	{% for a in similar %}
+		{% for s in similar %}
 	<li> 
-		<a href="{% url 'artist' a.name %}"> {{a.name}} </a>
+		<a href="{% url 'artist' s.id %}">{{s.name}}</a>
 	</li>
-	{% endfor %}
+		{% endfor %}
 	</ul>
 	
-</body>
-</html>
+{% endblock %}

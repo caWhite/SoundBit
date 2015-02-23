@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+	<h1>{{genre.name|capfirst}}</h1>
+	<p>{{genre.profile.description}}</p>
+	<h3> Top Artists </h3>
+	<ul>
+		{% for s in genre.similar %}
+			<li><a href="{% url 'artist' s.id %}">{{s.name}}</a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}

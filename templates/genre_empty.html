@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<form method='post'>
+	{% csrf_token %}
+	<select name='genre' selected=''>
+		{% for g in genres %}
+			<option value='{{g}}'>
+				{{g}}
+			</option>
+		{% endfor %}
+	</select>
+	<input value='Go!' type='submit'>
+</form>
+{% endblock %}
