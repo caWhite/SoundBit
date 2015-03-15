@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<div class="jumbotron ">
+	<img src="{% static 'imgs/sorry.png' %}">
+	<h1> {{error}} </h1>
+</div>
+
+{% endblock %}
