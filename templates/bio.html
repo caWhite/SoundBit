@@ -1,24 +1,34 @@
 {% extends 'base.html' %}
 
 {% block body %}
-	<h1> {{ artist_name }} </h1>
-	{% for g in artist.genre%}
+<div class='jumbotron'>
+	<img src="{{profile.image}}">
+	<h1> {{ profile.name }} </h1>
+	{% for g in profile.genre%}
 		<span> 
 			<a href="{% url 'genre' g %}">{{g}}</a> 
 		</span>
 	{% endfor %}
-	<h2> Bio </h2>
-	<p> 
-		{{bio.text}} 
-		<a href="{{artist.bio.url}}">Read more</a>
-	</p>
+	
+	<h2> Top Songs </h2>
+	{% for s in song_stream %}
+		<label for = '{{s.name}}'>{{s.name}}</label>
+		<audio controls name='{{s.name}}'>
+			{% if s.url %}
+				<source src='{{s.url}}' type="audio/mpeg"/>
+			{% else %}
+				<p> No stream available </p>	
+			{% endif %}
+		</audio>
+
+	{% endfor %}
 	<h2> Simlar Artists </h2>
-	<ul>
+	<ul class='list-unstyled'>
 		{% for s in similar %}
 	<li> 
 		<a href="{% url 'artist' s.id %}">{{s.name}}</a>
 	</li>
 		{% endfor %}
 	</ul>
-	
+</div>
 {% endblock %}

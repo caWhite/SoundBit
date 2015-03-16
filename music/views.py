@@ -1,42 +1,46 @@
-from django.shortcuts import render, render_to_response, redirect
-from django.http import HttpResponse
-#from django.utils.http imnport urlencode --- don't need?
+from django.shortcuts import render, redirect
 import requests, json
+from helpers import *
 from variables import ECHO_API_KEY, genres
+from bs4 import BeautifulSoup
+
 # Create your views here.
 
-#ECHO_API_KEY = 'VRATZ6WBCFTG00HZA'
+ECHO_API_KEY = 'VRATZ6WBCFTG00HZA'
 SEVEN_DIGITAL_CONSUMER = '7dsmbgsr26pt'
 SEVEN_DIGITAL_SECRET = '4r4zkx5598dragxm'
 
 def index(request):
-	return render_to_response('index.html')
+	return redner(request, 'index.html')
 
+def about(request):
+	return render(request, 'about.html')
 def search(request):
-	if request.method == "GET":
-		artist = request.GET.get("name")
-		if artist:
-			return redirect("artist", artist_id=get_id(artist))
-		else:
-			return render(request, "search.html")
+	if not request.POST.get('name'):
+		return render(request, "search_error.html", {'error': "No artist's name entered!"})
 	else:
-		if not request.POST.get('name'):
-			return render(request, "search.html", {'error': "No artist's name entered!"})
+		artist = request.POST['name']
+		artist_id = get_id(artist)
+		if artist_id:
+			return redirect("artist", artist_id=artist_id)
 		else:
-			artist = request.POST['name']
-			return redirect("artist", artist_id=get_id(artist))
+			return render(request, "search_error.html", {'error': "We couldn\'t find any artist by that name!"})
+
 
 
 def artist(request, artist_id = None):
 	if not artist_id or artist_id == 'None':
 		return redirect("search")
 	else:
+		profile = artist_profile(artist_id)
+		if profile.get('seven_id'):
+			top = top_songs(profile['seven_id'])
+			song_stream = [ {'name': s['name'] ,'url': stream(s['id']) } for s in top ]
 		context = dict(
-			artist_name = get_name(artist_id),
-			bio = get_bio(artist_id),
+			profile = profile,
 			similar = get_similar(artist_id),
+			song_stream = song_stream
 			)
-		print get_id(get_name(artist_id),'id:7digital-US')
 		return render(request,"bio.html", context)
 
 def get_name(artist_id):
@@ -52,17 +56,17 @@ def get_name(artist_id):
 	except KeyError:
 		return None
 
-def top_songs(artist_id, limit = 5, sort = 'song_hotttnesss-desc'):
-	url = 'http://developer.echonest.com/api/v4/song/search'
-
+def top_songs(artist_id, limit = 3):
+	url = 'http://api.7digital.com/1.2/artist/toptracks'
 	params = dict(
-	api_key= ECHO_API_KEY,		
-	artist_id=  artist_id,
-	results= limit,
-	bucket = ['tracks', 'id:spotify']
+	oauth_consumer_key= SEVEN_DIGITAL_CONSUMER,		
+	artistId=  artist_id,
+	pageSize = limit,
 	)
 	r = requests.get(url=url, params=params)
-	#return [s['artist_foreign_ids']]
+	rurl = r.url
+	soup = BeautifulSoup(r.text).tracks.find_all('track')
+	return [{'name': song.title.text,'id':song['id']} for song in soup]
 	
 #Returns echonest ID for given artist parameter, takes optional namespace parameter to return id in the given namespace
 def get_id(artist, namespace = None):
@@ -91,31 +95,13 @@ def get_id(artist, namespace = None):
 			return r.json()['response']['artists'][0].get('id')
 		except IndexError:
 			return None
-	
-def get_bio(artist_id):
-	url = 'http://developer.echonest.com/api/v4/artist/biographies'
-	params = dict(
-		api_key= ECHO_API_KEY,
-		id= artist_id,
-		license='cc-by-sa',
-		results=5,
-		)
-	r = requests.get(url=url, params=params)
-	data = r.json()
-	try:
-		bios = data['response']['biographies']
-		for b in bios:
-			if b['license']['attribution'] == 'Last.fm':
-				return b
-	except (KeyError, IndexError) as e:
-		return None
 
-def get_similar(artist_id, limit = 'False'):
+def get_similar(artist_id, limit = 3):
 	url = 'http://developer.echonest.com/api/v4/artist/similar'
 	params = dict(
 		api_key = ECHO_API_KEY,
 		id = artist_id,
-		limit = limit,
+		results = limit,
 	)
 	r = requests.get(url=url, params=params)
 	try:
@@ -123,7 +109,26 @@ def get_similar(artist_id, limit = 'False'):
 		return [a for a in data]
 	except KeyError:
 		return None
-		
+
+def artist_profile(artist_id):
+	url = 'http://developer.echonest.com/api/v4/artist/profile'
+	params = dict(
+		api_key = ECHO_API_KEY,
+		id = artist_id,
+		bucket = ['images','id:7digital-US','genre'],)
+	r = requests.get(url=url, params=params)
+	data = r.json()
+	profile = dict(
+		name = data['response']['artist']['name'],
+		genre = [g['name'] for g in data['response']['artist']['genres']][:3],
+		seven_id = data['response']['artist'].get('foreign_ids')[0].get('foreign_id')[19:]
+		)
+	try:
+		profile['image'] = data['response']['artist']['images'][2]['url']
+	except Exception:
+		pass
+	return profile
+
 # ***** Views pertaining to genres ***** 
 def genre(request, genre= None):
 	if request.method == 'POST':
@@ -143,7 +148,6 @@ def genre(request, genre= None):
 				#genres = allgenres()
 				genres = genres
 				)
-			print allgenres()
 			return render(request, 'genre_empty.html', context)
 
 def allgenres():
