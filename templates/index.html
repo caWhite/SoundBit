@@ -1,6 +1,7 @@
-<!DOCTYPE html>
-<head></head>
-<body>
-<h1> Music Index </h1>
-<a href="{% url 'search' %}">Search Music</a>
-</body>
+{% extends 'base.html' %}
+
+{% block body %}
+<div class='jumbotron'>
+	<p> Welcome to SoundBit. We'll keep it short, you love music and can't get enough of it. We're here to help. Search above and check out some awesome music samples </p>
+</div>
+{% endblock %}

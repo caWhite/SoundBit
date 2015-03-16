@@ -11,7 +11,7 @@ SEVEN_DIGITAL_CONSUMER = '7dsmbgsr26pt'
 SEVEN_DIGITAL_SECRET = '4r4zkx5598dragxm'
 
 def index(request):
-	return redner(request, 'index.html')
+	return render(request, 'index.html')
 
 def about(request):
 	return render(request, 'about.html')
