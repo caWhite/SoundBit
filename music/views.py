@@ -33,14 +33,15 @@ def artist(request, artist_id = None):
 		return redirect("search")
 	else:
 		profile = artist_profile(artist_id)
-		if profile.get('seven_id'):
-			top = top_songs(profile['seven_id'])
-			song_stream = [ {'name': s['name'] ,'url': stream(s['id']) } for s in top ]
 		context = dict(
 			profile = profile,
 			similar = get_similar(artist_id),
-			song_stream = song_stream
 			)
+		if profile.get('seven_id'):
+			top = top_songs(profile['seven_id'])
+			if top:
+				song_stream = [ {'name': s['name'] ,'url': stream(s['id']) } for s in top ]
+				context['song_stream'] = song_stream
 		return render(request,"bio.html", context)
 
 def get_name(artist_id):
@@ -121,12 +122,15 @@ def artist_profile(artist_id):
 	profile = dict(
 		name = data['response']['artist']['name'],
 		genre = [g['name'] for g in data['response']['artist']['genres']][:3],
-		seven_id = data['response']['artist'].get('foreign_ids')[0].get('foreign_id')[19:]
 		)
 	try:
 		profile['image'] = data['response']['artist']['images'][2]['url']
 	except Exception:
 		pass
+	try:
+		profile['seven_id'] = data['response']['artist'].get('foreign_ids')[0].get('foreign_id')[19:]
+	except Exception:
+		pass		
 	return profile
 
 # ***** Views pertaining to genres ***** 
@@ -145,7 +149,6 @@ def genre(request, genre= None):
 			return render(request, 'genre.html', context)
 		else:
 			context = dict(
-				#genres = allgenres()
 				genres = genres
 				)
 			return render(request, 'genre_empty.html', context)
