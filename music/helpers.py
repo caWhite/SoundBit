@@ -1,7 +1,7 @@
 from string import ascii_letters, digits
 from random import choice
 from urllib2 import quote 
-from keys import SEVEN_DIGITAL_CONSUMER, SEVEN_DIGITAL_SECRET
+from django_music.settings import SEVEN_DIGITAL_CONSUMER, SEVEN_DIGITAL_SECRET
 import hashlib, hmac, base64, time
 
 def generate_nonce(size=12):

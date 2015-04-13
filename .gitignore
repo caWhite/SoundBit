@@ -1,5 +1,4 @@
 music/keys.py
 music/migration/
-django_music/settings.py
 *.pyc
 db.sqlite3

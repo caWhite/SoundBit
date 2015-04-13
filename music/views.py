@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from keys import *
+from django_music.settings import ECHO_API_KEY, SEVEN_DIGITAL_CONSUMER, SEVEN_DIGITAL_SECRET
 from helpers import *
 from variables import GENRES
 from bs4 import BeautifulSoup
