@@ -27,7 +27,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 TEMPLATE_DIRS = [TEMP_PATH,]
-ALLOWED_HOSTS = ['localhost',PROD_SERVER]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
