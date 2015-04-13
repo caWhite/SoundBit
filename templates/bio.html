@@ -11,17 +11,20 @@
 	{% endfor %}
 	
 	<h2> Top Songs </h2>
-	{% for s in song_stream %}
-		<label for = '{{s.name}}'>{{s.name}}</label>
-		<audio controls name='{{s.name}}'>
-			{% if s.url %}
-				<source src='{{s.url}}' type="audio/mpeg"/>
-			{% else %}
-				<p> No stream available </p>	
-			{% endif %}
-		</audio>
-
-	{% endfor %}
+	{% if song_stream %}
+		{% for s in song_stream %}
+			<label for = '{{s.name}}'>{{s.name}}</label>
+			<audio controls name='{{s.name}}'>
+				{% if s.url %}
+					<source src='{{s.url}}' type="audio/mpeg"/>
+				{% else %}
+					<p> No stream available </p>	
+				{% endif %}
+			</audio>
+		{% endfor %}
+	{% else %}
+	<p>We couldn't find any songs for this artist. Sorry! </p>
+	{% endif %}
 	<h2> Simlar Artists </h2>
 	<ul class='list-unstyled'>
 		{% for s in similar %}
