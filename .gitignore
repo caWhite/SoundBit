@@ -2,3 +2,4 @@ music/keys.py
 music/migration/
 *.pyc
 db.sqlite3
+.env
