@@ -23,7 +23,7 @@ PROD_SERVER = os.environ['PROD_SERVER']
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", False)
 
 TEMPLATE_DEBUG = False
 TEMPLATE_DIRS = [TEMP_PATH,]

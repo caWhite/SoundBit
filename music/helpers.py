@@ -8,14 +8,14 @@ def generate_nonce(size=12):
     return ''.join([choice(ascii_letters+digits) for a in range(size)])
 
 def url_encode(data):
-	return quote(data,'')
+	return quote(data)
 
 def generate_signature(base_url):
 	h = hmac.HMAC(SEVEN_DIGITAL_SECRET + '&', base_url, hashlib.sha1).digest()
 	return url_encode(base64.b64encode(h))	
 
 def stream(track_id):
-	url = 'http://previews.7digital.com/clip/%s'
+	url = 'http://previews.7digital.com/clip/%s'%track_id
 	values = dict(
 	oauth_consumer_key = SEVEN_DIGITAL_CONSUMER,
 	oauth_signature_method = 'HMAC-SHA1',
@@ -24,7 +24,8 @@ def stream(track_id):
 	oauth_timestamp = int(time.time()),
 	country = 'US',
 	)
-	base_string = 'GET&' + url_encode(url%track_id) + '&' + url_encode('&'.join(["%s=%s" % (a,b) for a,b in sorted(values.items())]))
+	base_string = 'GET&' + url_encode(url) + '&' + url_encode('&'.join(["%s=%s" % (a,b) for a,b in sorted(values.items())]))
+
 	values['oauth_signature'] = generate_signature(base_string)
 
-	return url%track_id + '?' + '&'.join(["%s=%s" % (a,b) for a,b in values.items()])
+	return url + '?' + '&'.join(["%s=%s" % (a,b) for a,b in values.items()])
