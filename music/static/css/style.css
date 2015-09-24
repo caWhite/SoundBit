@@ -1,0 +1,69 @@
+body
+{
+	background: url('/static/imgs/live.jpg') no-repeat center fixed;
+}
+
+label
+{
+	display: block;
+	color: #000;
+}
+
+a{
+	text-decoration: none !important;
+}
+img.artist-art
+{	
+	display: block;
+	max-height: 300px;
+	height: auto;
+	margin: 0 auto;
+	text-align: center;
+}
+.album-art
+{
+	display: block;
+	width: 100%;
+	height: auto;
+
+}
+
+.label-middle
+{
+	display: block;
+	margin: 2% auto;
+	text-align: center;
+}
+
+.label-left{
+	display: block;
+	text-align: left;
+}
+
+
+.grid{
+	margin: 0 auto;
+}
+
+.grid-item{
+	float: left;
+	width: 30%;
+	margin: 2px;
+}
+
+img.album-img{
+	cursor: pointer;
+	width: 100%;
+	max-height: 320px;
+}
+.grid-item span{
+	position: absolute;
+	display: inline-block;
+	word-wrap: break-word;
+	padding:5px;
+	color: #fff;
+	background: rgba(0,0,0,.5);
+}
+.grid-item img{
+	width: 100%;
+}

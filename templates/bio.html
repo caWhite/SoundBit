@@ -1,37 +1,64 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block body %}
-<div class='jumbotron'>
-	<img src="{{profile.image}}">
-	<h1> {{ profile.name }} </h1>
-	{% for g in profile.genre%}
-		<span> 
-			<a href="{% url 'genre' g %}">{{g}}</a> 
-		</span>
-	{% endfor %}
-	
-	<h2> Top Songs </h2>
-	{% if song_stream %}
-		{% for s in song_stream %}
-			<label for = '{{s.name}}'>{{s.name}}</label>
-			<audio controls name='{{s.name}}'>
-				{% if s.url %}
-					<source src='{{s.url}}' type="audio/mpeg"/>
-				{% else %}
-					<p> No stream available </p>	
-				{% endif %}
-			</audio>
-		{% endfor %}
-	{% else %}
-	<p>We couldn't find any songs for this artist. Sorry! </p>
-	{% endif %}
-	<h2> Simlar Artists </h2>
-	<ul class='list-unstyled'>
-		{% for s in similar %}
-	<li> 
-		<a href="{% url 'artist' s.id %}">{{s.name}}</a>
-	</li>
-		{% endfor %}
-	</ul>
-</div>
-{% endblock %}
+
+<div class="jumbotron">
+
+	<div class="container">
+		<div class="col-md-6 col-sm-12">
+
+			<h2 class="label-middle"> {{ artist.name }} </h2>
+			<img class="artist-art" src="{{artist.images.0.url}}">
+		</div>
+
+		<div class="col-md-6 col-sm-12">
+			<h2 class="label-middle"> Recent News </h2>
+			<ul class="list-unstyled">
+				{% for story in news %}
+				<li>
+					<h4><a href="{{ story.url }}"> {{ story.name|safe }}</a></h4>
+				</li>				
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<h2 class="label-middle"> Albums </h2>
+
+	<div class="container">
+		<div class="grid">
+			{% for a in albums %}
+			<div class="grid-item">
+				<span> {{ a.name }}</span>
+				<img id="{{a.id}}"class="album-img" src="{{a.images.0.url}}">
+				<audio>
+					<source src="{{a.preview_url}}">
+				</audio>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+
+		<h2 class="label-middle"> Simlar Artists </h2>	
+		<div class="container">
+			<div class="grid">
+				{% for s in similar %}
+				<div class="grid-item">
+					<span> {{ s.name }}</span>
+					<a href="{% url 'artist' s.id %}"> 
+						<img src="{{s.images.0.url}}" alt="">
+					</a>
+				</div>
+				{% endfor %}				
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Load Jquery and Masonry -->
+	{% load staticfiles %}
+	<script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>	
+	<script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>	
+	<script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
+	<script src="{% static 'js/soundbit.js' %}"></script>
+	{% endblock %}

@@ -2,19 +2,23 @@
 
 {% block body %}
 <div class='jumbotron'>
-	<h1>Search Genre</h1>
-	<form method='post'>
-		{% csrf_token %}
-		<div class='form-group'>
-			<select name='genre' selected=''>
-				{% for g in genres %}
-					<option value='{{g}}'>
-						{{g}}
-					</option>
-				{% endfor %}
-			</select>
+	<div class="container">
+		<div class="col-sm-6 col-sm-offset-3">
+			<h1>Search Genre</h1>
+			<form method='post'>
+				{% csrf_token %}
+				<div class='form-group'>
+					<select class="form-control" name='genre' selected=''>
+						{% for g in genres %}
+						<option value='{{g}}'>
+							{{g}}
+						</option>
+						{% endfor %}
+					</select>
+				</div>
+				<button class="btn btn-primary" type='submit'> Go </button>
+			</form>		
 		</div>
-		<button class='btn btn-default' type='submit'> Go </button>
-	</form>
+	</div>
 </div>
 {% endblock %}

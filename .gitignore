@@ -3,3 +3,6 @@ music/migration/
 *.pyc
 db.sqlite3
 .env
+*.sublime-workspace
+*.sublime-project
+.idea

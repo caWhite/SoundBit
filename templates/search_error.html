@@ -2,8 +2,12 @@
 {% load static %}
 {% block body %}
 <div class="jumbotron ">
-	<img src="{% static 'imgs/sorry.png' %}">
-	<h1> {{error}} </h1>
+	<div class="container">
+		<div class="col-sm-6 col-sm-offset-3">
+			<img src="{% static 'imgs/sorry.png' %}">
+			<h1> {{error}} </h1>	
+		</div>
+	</div>
 </div>
 
 {% endblock %}
