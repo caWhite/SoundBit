@@ -17,10 +17,6 @@ TEMP_PATH = os.path.join(BASE_DIR,'templates')
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 ECHO_API_KEY = os.environ['ECHO_API_KEY']
-SEVEN_DIGITAL_CONSUMER = os.environ['SEVEN_DIGITAL_CONSUMER']
-SEVEN_DIGITAL_SECRET = os.environ['SEVEN_DIGITAL_SECRET']
-PROD_SERVER = os.environ['PROD_SERVER']
-SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", False)
