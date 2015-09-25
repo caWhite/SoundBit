@@ -1,3 +1,4 @@
+import pdb
 import requests
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -36,19 +37,22 @@ def artist(request, artist_id = None):
 		return render(request, "search_error.html", {'error': 'There was an error processing your request'})
 
 
-def searchArtist(name, limit = 1):
+def searchArtist(name):
 	"""
-	returns one or more Spotify artist objects
+	Returns <int> id:spotify:artist if succesful, None otherwise
 	"""
-	r = requests.get("https://api.spotify.com/v1/search",
-		params ={
-			'q': name,
-			'type': 'artist',
-			'limit': limit
-		}).json()['artists']['items']
-
-	if r:
-		return r if len(r) > 1 else r[0]
+	endpoint = "artist/search"
+	r = requests.get(echonest_base_url + endpoint,
+		params = { "api_key": ECHO_API_KEY,
+			"name": name,
+			"bucket": "id:spotify",})
+	
+	if r.status_code == 200:
+		response = r.json()
+		artists = response.get("response").get("artists",[])
+		if artists and artists[0].get("foreign_ids") != 0:
+			artist_id = artists[0].get("foreign_ids")[0].get("foreign_id")[15:]
+			return artist_id
 
 def isValidArtistID(artist_id):
 	endpoint = "artists/%s" % artist_id
@@ -96,12 +100,12 @@ def getSimilarArtists(artist_id, limit = 5):
 def getProfile(artist_id):
 	endpoint = "artist/profile"
 	
-	response = requests.get(echonest_base_url + endpoint, params= {
-		'api_key': ECHO_API_KEY,
-		'id': "spotify:artist:" + artist_id,
-		"bucket": ['biographies', 'news', 'artist_location']}).json()['response']['artist']
-
-	return {k:v for (k,v) in response.items()}
+	response = requests.get(echonest_base_url + endpoint, 
+		params= {	'api_key': ECHO_API_KEY,
+					'id': "spotify:artist:" + artist_id,
+					"bucket": ['biographies', 'news', 'artist_location']}).json().get('response',{}).get('artist')
+	if response:
+		return {k:v for (k,v) in response.items()}
 
 def getNews(artist_id, limit = 5, relevance = True):
 	endpoint = "artist/news"

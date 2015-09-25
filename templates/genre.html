@@ -3,22 +3,24 @@
 {% block body %}
 <div class='jumbotron'>
 	<div class="container">
-		<h1>{{genre.name|capfirst}}</h1>
-		{% if genre.profile.description %}
+		<div class="col-sm-6">
+			<h1>{{genre.name|capfirst}}</h1>
+			{% if genre.profile.description %}
 			<p>{{genre.profile.description}}</p>
-		{% else %}
+			{% else %}
 			<p>Looks like we couldn't find a description </p>
-		{% endif %}
-		<h1> Top Artists </h1>
-		<ul class='list-unstyled'>
-			{% for s in genre.similar %}
-			<li>
-				<h3>
-					<a href="{% url 'artist' s.foreign_ids %}">{{s.name}}</a>
-				</h3>
-			</li>
-			{% endfor %}
-		</ul>
+			{% endif %}
+			<h1> Top Artists </h1>
+			<ul class='list-unstyled'>
+				{% for s in genre.similar %}
+				<li>
+					<h3>
+						<a href="{% url 'artist' s.foreign_ids %}">{{s.name}}</a>
+					</h3>
+				</li>
+				{% endfor %}
+			</ul>
 		</div>
+	</div>
 </div>
 {% endblock %}

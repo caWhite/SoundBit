@@ -1,5 +1,6 @@
+import pdb
 from django.shortcuts import render, redirect
-# from artist import get_id
+
 from artist import searchArtist
 def index(request):
 	return render(request, 'index.html')
@@ -13,9 +14,9 @@ def search(request):
 		if not artist_name:
 			return render(request, "search_error.html", {'error': "No artist's name entered!"})
 		else:
-			artist = searchArtist(artist_name)
-			if artist:
-				return redirect("artist", artist_id = artist['id'])
+			artist_id = searchArtist(artist_name)
+			if artist_id:
+				return redirect("artist", artist_id = artist_id)
 			else:
 				return render(request, "search_error.html", {'error': "We couldn't find any artist by that name!"} )
 	else:
