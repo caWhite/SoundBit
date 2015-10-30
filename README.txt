@@ -1,1 +1,1 @@
-sound-bit.app.herokuapp.com
+soundbit-app.herokuapp.com
