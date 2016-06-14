@@ -5,21 +5,10 @@
 <div class="jumbotron">
 
 	<div class="container">
-		<div class="col-md-6 col-sm-12">
+		<div class="col-md-12 col-sm-12">
 
 			<h2 class="label-middle"> {{ artist.name }} </h2>
 			<img class="artist-art" src="{{artist.images.0.url}}">
-		</div>
-
-		<div class="col-md-6 col-sm-12">
-			<h2 class="label-middle"> Recent News </h2>
-			<ul class="list-unstyled">
-				{% for story in news %}
-				<li>
-					<h4><a href="{{ story.url }}"> {{ story.name|safe }}</a></h4>
-				</li>				
-				{% endfor %}
-			</ul>
 		</div>
 	</div>
 

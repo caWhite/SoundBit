@@ -16,8 +16,6 @@ TEMP_PATH = os.path.join(BASE_DIR,'templates')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
-ECHO_API_KEY = os.environ['ECHO_API_KEY']
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", False)
 SECRET_KEY = os.environ.get("SECRET_KEY")
