@@ -1,4 +1,3 @@
-music/settings.py
 music/migration/
 *.pyc
 db.sqlite3
